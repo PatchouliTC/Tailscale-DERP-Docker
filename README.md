@@ -1,5 +1,4 @@
 # Introduction
-
 The aim of this repository is to create a simple and easy to use docker container with minimal setup to run your own Tailscale DERP server.  
 
 There is two parts to the container, the tailscale client itself and the DERP server. The tailscale client is used to connect the container to your tailnet as it's own device, this allows the --verify-clients argument to be set on the derp server, this is so only devices in your own tailnet can use the DERP server, allowing it to the open internet in my opinion is a bad idea. 
@@ -12,8 +11,10 @@ My recommendation for the tailscale auth key to key an non-ephemeral key and onc
 
 The container was built and tested on Ubuntu 22 5.19.0-28-generic. It's docker so it will most likely work on other distros as well.
 
-# Container
+# Maintenance Disclaimer
+This project is not actively maintained. A Github action will build the package with the latest versions availble but I don't have the time to work on or uplift this project.
 
+# Container
 The container is setup to pull the latest version of the DERPER application and the latest version of Tailscale each time you build the container.
 
 To rebuild with the latest version simple run the following commands
@@ -23,7 +24,6 @@ docker build . -t tailscale-derp-docker:1.0
 ```
 
 # Github Container Registry
-
 If you don't want to build the container, you can simply using the pre-built container I have added to the github container registry.
 
 Using the docker-compose.yml file, simply change this line
@@ -32,17 +32,14 @@ image: tailscale-derp-docker:1.0
 ```
 To the following,
 ```
-image: ghcr.io/tijjjy/tailscale-derp-docker:latest
+image: ghcr.io/n0ptr/tailscale-derp-docker:latest
 ```
 
 There is a github actions workflow setup to build and publish a new container every roughly every 10 days so the tailscale version will be matching whichever version is available here https://pkgs.alpinelinux.org/package/edge/community/x86/tailscale
 
-# Instructions
+# Setup Details
 
-Instructions can be followed below or you can find a more detailed walkthrough on my blog. [https://tijjjy.me/2023-01-22/Self-Host-Tailscale-Derp-Server](https://tijjjy.me/2023-01-22/Self-Host-Tailscale-Derp-Server)
-
-### Ports Required
-
+## Ports Required
 To allow full functionality of the DERP server, you will need to open/allow the following ports on your Firewall/Security Group
 
 ```
@@ -53,8 +50,7 @@ To allow full functionality of the DERP server, you will need to open/allow the 
 
 Port 3478 is for STUN
 
-### Changing the .env file variables
-
+## Changing the .env file variables
 **IMPORTANT STEP**
 
 Change the variables below, most importantly the hostname and tailscale auth key variable.  
@@ -67,25 +63,24 @@ TAILSCALE_DERP_CERTMODE=letsencrypt
 TAILSCALE_AUTH_KEY="ENTER YOUR TAILSCALE AUTH KEY HERE"
 ```
 
-### Building Docker Image
+## Building Docker Image
 ```
 docker build . -t tailscale-derp-docker:1.0
 ```
-### Starting the image
+
+## Starting the image
 ```
 docker compose up -d
 ```
 
-### Checking containers logs
-
+## Checking containers logs
 All processes and scripts are set to direct logs to stdout run the below command to monitor the container logs
 
 ```
 docker logs -f tailscale-derp
 ```
 
-# Changing the Tailscale ACL
-
+## Changing the Tailscale ACL
 Once your Tailscale DERP server is operational and you can see the new device in the devices section of the Tailscale admin console, You need to change your ACL to only allow the use of your DERP server and omit out the default Tailscale servers. This can be done by adding the following config at the bottom of your ACL file.
 
 ```
