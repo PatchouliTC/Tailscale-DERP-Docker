@@ -6,17 +6,27 @@
     --state=/var/lib/tailscale/tailscaled.state \
     >> /dev/stdout &
 
-until /usr/bin/tailscale status 2>&1 | grep -qv "failed to connect"; do
+until /usr/bin/tailscale status >/dev/null 2>&1; do
     echo "Waiting for tailscaled to be ready..."
     sleep 1
 done
+echo "tailscaled is ready."
+
+TS_STATUS=$(/usr/bin/tailscale status 2>&1)
+NEED_AUTH=""
+if echo "$TS_STATUS" | grep -q "Logged out"; then
+    echo "Tailscale is logged out, will use auth-key to login."
+    NEED_AUTH="--auth-key $TAILSCALE_AUTH_KEY"
+else
+    echo "Tailscale is already logged in, skipping auth-key."
+fi
 
 if [ -n "$HEADSCALE_LOGIN_SERVER" ]; then
     /usr/bin/tailscale up \
         --accept-routes=false \
         --accept-dns=false \
         --login-server=$HEADSCALE_LOGIN_SERVER \
-        --auth-key $TAILSCALE_AUTH_KEY \
+        $NEED_AUTH \
         --netfilter-mode=off \
         --hostname=$TAILSCALE_HOSTNAME \
         >> /dev/stdout
@@ -24,7 +34,7 @@ else
     /usr/bin/tailscale up \
         --accept-routes=false \
         --accept-dns=false \
-        --auth-key $TAILSCALE_AUTH_KEY \
+        $NEED_AUTH \
         --netfilter-mode=off \
         --hostname=$TAILSCALE_HOSTNAME \
         >> /dev/stdout
@@ -97,4 +107,16 @@ fi
     --stun=true \
     --stun-port=$DERP_STUN_PORT \
     --http-port=$DERP_HTTP_PORT \
-    --verify-clients=$TAILSCALE_DERP_VERIFY_CLIENTS
+    --verify-clients=$TAILSCALE_DERP_VERIFY_CLIENTS 2>&1 | while IFS= read -r line; do
+    echo "$line"
+    # 检查是否包含 CertName
+    case "$line" in
+        *'"CertName"'*)
+            CERT_NAME=$(echo "$line" | sed -n 's/.*"CertName":"\([^"]*\)".*/\1/p')
+            if [ -n "$CERT_NAME" ]; then
+                echo "$CERT_NAME" > /root/derper/ssl/certname.txt
+                echo "CertName extracted and saved: $CERT_NAME"
+            fi
+            ;;
+    esac
+done
