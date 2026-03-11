@@ -11,8 +11,12 @@
 
 # 容器
 容器设置为每次构建时拉取最新版本的 DERPER 应用程序和最新版本的 Tailscale。
+```
+docker pull ghcr.io/patchoulitc/tailscale-derp-docker:latest
+```
 
-要使用最新版本重新构建，只需运行以下命令：
+
+要本地使用最新版本重新构建，只需运行以下命令：
 ```bash
 docker rmi tailscale-derp-docker:1.0
 docker build . -t tailscale-derp-docker:1.0

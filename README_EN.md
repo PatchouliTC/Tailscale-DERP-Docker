@@ -9,8 +9,12 @@ In this container,tailscale will running in userspace mode---which require no NA
 
 # Container
 The container is setup to pull the latest version of the DERPER application and the latest version of Tailscale each time you build the container.
+```bash
+docker pull ghcr.io/patchoulitc/tailscale-derp-docker:latest
+```
 
-To rebuild with the latest version simple run the following commands
+To rebuild with the latest version in local, simple run the following commands 
+
 ```bash
 docker rmi tailscale-derp-docker:1.0
 docker build . -t tailscale-derp-docker:1.0
