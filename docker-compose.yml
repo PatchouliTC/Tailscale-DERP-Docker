@@ -11,8 +11,10 @@ services:
          - $PWD/config:/var/lib/tailscale
        env_file:
         - .env
-       cap_add:
-         - NET_ADMIN
+      # Use for modify system udp max flow,without this, tailscaled will give error [failed to force-set UDP read buffer size to 7340032]
+      # If you don't need to modify system udp max flow, you can remove CAP_NET_ADMIN
+      #  cap_add:
+      #    - NET_ADMIN
        ports:
          # if use derp to get certs, make sure to expose the HTTP 80 port for ACME challenges
          #- 80:80/tcp
