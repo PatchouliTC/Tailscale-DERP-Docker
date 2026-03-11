@@ -58,7 +58,7 @@ Change the variables in .env file
 
 | Config | Default | Desc |
 |--------|--------|------|
-| `TAILSCALE_DERP_HOSTNAME` | `derp.example.com` | DERP Domain |
+| `TAILSCALE_DERP_HOSTNAME` | `derp.example.com` | DERP Domain/ipv4 |
 | `TAILSCALE_DERP_VERIFY_CLIENTS` | `true` | is verify cilent (**do not change**) |
 | `HEADSCALE_LOGIN_SERVER` | `https://your.headscale.server` | tailnet login server(for headscale,empty will use the official login server) |
 | `TAILSCALE_AUTH_KEY` | `ENTER YOUR TAILSCALE AUTH KEY HERE` | Tailscale preauth key |

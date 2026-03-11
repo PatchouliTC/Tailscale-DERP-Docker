@@ -61,7 +61,7 @@ docker build . -t tailscale-derp-docker:1.0
 
 | 配置项 | 默认值 | 说明 |
 |--------|--------|------|
-| `TAILSCALE_DERP_HOSTNAME` | `derp.example.com` | DERP 域名 |
+| `TAILSCALE_DERP_HOSTNAME` | `derp.example.com` | DERP 域名/ipv4地址 |
 | `TAILSCALE_DERP_VERIFY_CLIENTS` | `true` | 是否验证客户端（**请勿修改**） |
 | `HEADSCALE_LOGIN_SERVER` | `https://your.headscale.server` | tailnet 登录服务器（用于 Headscale，留空则使用官方登录服务器） |
 | `TAILSCALE_AUTH_KEY` | `ENTER YOUR TAILSCALE AUTH KEY HERE` | Tailscale 预授权密钥 |
