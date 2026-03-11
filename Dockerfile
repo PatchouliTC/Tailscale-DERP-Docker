@@ -1,6 +1,6 @@
 FROM alpine:latest AS builder
 
-LABEL org.opencontainers.image.source https://github.com/n0ptr/Tailscale-DERP-Docker
+#LABEL org.opencontainers.image.source https://github.com/n0ptr/Tailscale-DERP-Docker
 
 #Install GO and Tailscale DERPER
 RUN apk add go --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
@@ -23,6 +23,7 @@ RUN chmod +x /init.sh
 
 #Derper Web Ports
 EXPOSE 80
+EXPOSE 10086
 EXPOSE 443/tcp
 #STUN
 EXPOSE 3478/udp
