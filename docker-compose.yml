@@ -11,6 +11,8 @@ services:
          - $PWD/config:/var/lib/tailscale
        env_file:
         - .env
+       cap_add:
+         - NET_ADMIN
        ports:
          # if use derp to get certs, make sure to expose the HTTP 80 port for ACME challenges
          #- 80:80/tcp
