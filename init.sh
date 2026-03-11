@@ -19,9 +19,12 @@ fi
 
 #Start Tailscale derp server
 /root/go/bin/derper \
---hostname $TAILSCALE_DERP_HOSTNAME \
---bootstrap-dns-names $TAILSCALE_DERP_HOSTNAME \
---certmode $TAILSCALE_DERP_CERTMODE \
---certdir /root/derper/$TAILSCALE_DERP_HOSTNAME \
---stun \
+--hostname=$TAILSCALE_DERP_HOSTNAME \
+--bootstrap-dns-names=$TAILSCALE_DERP_HOSTNAME \
+--certmode=$TAILSCALE_DERP_CERTMODE \
+--certdir=/root/derper/$TAILSCALE_DERP_HOSTNAME \
+--stun=true\
+--sturn-port=3478 \
+--a=:443 \
+--http-port=80 \
 --verify-clients=$TAILSCALE_DERP_VERIFY_CLIENTS
