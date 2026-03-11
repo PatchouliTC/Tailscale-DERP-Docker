@@ -4,8 +4,8 @@
 /usr/sbin/tailscaled --tun=userspace-networking \
     --socks5-server=0.0.0.0:10086 \
     --state=/var/lib/tailscale/tailscaled.state \
-    >> /dev/stdout &
-    
+    >> /dev/stdout
+
 if [ -n "$HEADSCALE_LOGIN_SERVER" ]; then
     /usr/bin/tailscale up \
         --accept-routes=false \
@@ -14,7 +14,7 @@ if [ -n "$HEADSCALE_LOGIN_SERVER" ]; then
         --auth-key $TAILSCALE_AUTH_KEY \
         --netfilter-mode=off \
         --hostname=$TAILSCALE_HOSTNAME \
-        >> /dev/stdout &
+        >> /dev/stdout
 else
     /usr/bin/tailscale up \
         --accept-routes=false \
@@ -22,7 +22,7 @@ else
         --auth-key $TAILSCALE_AUTH_KEY \
         --netfilter-mode=off \
         --hostname=$TAILSCALE_HOSTNAME \
-        >> /dev/stdout &
+        >> /dev/stdout
 fi
 
 #Check for and or create certs directory

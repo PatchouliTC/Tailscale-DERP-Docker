@@ -12,6 +12,7 @@ services:
        env_file:
         - .env
        ports:
+         # if use derp to get certs, make sure to expose the HTTP 80 port for ACME challenges
          #- 80:80/tcp
          - 443:443/tcp
          - 3478:3478/udp

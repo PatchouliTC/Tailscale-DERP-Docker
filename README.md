@@ -97,7 +97,8 @@ Once your Tailscale DERP server is operational and you can see the new device in
 						"stunport": "mapping stunport,set -1 to disable stun for this node",
 						"stunonly": "true if this node only use for stun else false",
 						"derpport": "derp listening port",
-						"CanPort80": "false"
+						"CanPort80": "false",
+						"InsecureForTests": "true if use self sign ip cert"
 					},
 				],
 			},
