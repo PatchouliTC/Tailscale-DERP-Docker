@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+sysctl -w net.core.rmem_max=7340032
+sysctl -w net.core.wmem_max=7340032
+
+
 #Start tailscaled and connect to tailnet
 /usr/sbin/tailscaled --tun=userspace-networking --socks5-server=0.0.0.0:10086 --state=/var/lib/tailscale/tailscaled.state >> /dev/stdout &
 /usr/bin/tailscale up \
