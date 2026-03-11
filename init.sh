@@ -7,17 +7,17 @@
     >> /dev/stdout &
 
 until /usr/bin/tailscale status 2>&1 | grep -qv "failed to connect"; do
-    echo "Waiting for tailscaled to be ready..."
+    echo "---Waiting for tailscaled to be ready..."
     sleep 1
 done
 
 TS_STATUS=$(/usr/bin/tailscale status 2>&1)
 NEED_AUTH=""
 if echo "$TS_STATUS" | grep -q "Logged out"; then
-    echo "Tailscale is logged out, will use auth-key to login."
+    echo "---Tailscale is logged out, will use auth-key to login."
     NEED_AUTH="--auth-key $TAILSCALE_AUTH_KEY"
 else
-    echo "Tailscale is already logged in, skipping auth-key."
+    echo "---Tailscale is already logged in, skipping auth-key."
 fi
 
 if [ -n "$HEADSCALE_LOGIN_SERVER" ]; then
@@ -41,10 +41,11 @@ fi
 
 #Check for and or create certs directory
 if [ ! -d "/root/derper/ssl" ]; then
-    echo "Certs directory not found, creating..."   
+    echo "---Certs directory not found, creating..."   
     mkdir -p /root/derper/ssl
 fi
 
+echo "------------------------------------------------------"
 echo "Starting DERP server with the following configuration:"
 echo "Hostname: $TAILSCALE_DERP_HOSTNAME"
 echo "Cert Mode: $TAILSCALE_DERP_CERTMODE"
@@ -52,41 +53,42 @@ echo "DERP Address: $DERP_ADDR"
 echo "STUN Port: $DERP_STUN_PORT"
 echo "HTTP Port: $DERP_HTTP_PORT"
 echo "Verify Clients: $TAILSCALE_DERP_VERIFY_CLIENTS"
+echo "------------------------------------------------------"
 
 # Check if TAILSCALE_DERP_HOSTNAME is an IPv4 address
 IS_IPV4=$(echo "$TAILSCALE_DERP_HOSTNAME" | grep -Ec '^([0-9]{1,3}\.){3}[0-9]{1,3}$')
 
 if [ "$IS_IPV4" -eq 1 ]; then
-    echo "Hostname is an IPv4 address ,switch to self sign mode."
+    echo "---Hostname is an IPv4 address ,switch to self sign mode."
     # Switch certmode to manual if not already
     if [ "$TAILSCALE_DERP_CERTMODE" != "manual" ]; then
-        echo "Certmode is '$TAILSCALE_DERP_CERTMODE', switching to manual mode..."
+        echo "---Certmode is '$TAILSCALE_DERP_CERTMODE', switching to manual mode..."
         TAILSCALE_DERP_CERTMODE="manual"
     fi
     
     # Generate private key if not exists
     if [ ! -f "/root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.key" ]; then
-        echo "Generating private key..."
+        echo "---Generating private key..."
         openssl genrsa -out /root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.key 4096
     else
-        echo "Private key already exists, skipping..."
+        echo "---Private key already exists, skipping..."
     fi
        
     # Generate CSR if not exists
     if [ ! -f "/root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.csr" ]; then
-        echo "Generating CSR..."
+        echo "---Generating CSR..."
         openssl req -new \
             -key /root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.key \
             -out /root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.csr \
             -subj "/CN=$TAILSCALE_DERP_HOSTNAME" \
             -addext "subjectAltName=IP:$TAILSCALE_DERP_HOSTNAME"
     else
-        echo "CSR already exists, skipping..."
+        echo "---CSR already exists, skipping..."
     fi
     
     # Generate self-signed certificate if not exists (100 years)
     if [ ! -f "/root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.crt" ]; then
-        echo "Generating self-signed certificate (100 years)..."
+        echo "---Generating self-signed certificate (100 years)..."
         openssl x509 -req \
             -in /root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.csr \
             -signkey /root/derper/ssl/$TAILSCALE_DERP_HOSTNAME.key \
@@ -94,7 +96,7 @@ if [ "$IS_IPV4" -eq 1 ]; then
             -days 36500 \
             -extfile <(printf "subjectAltName=IP:$TAILSCALE_DERP_HOSTNAME")
     else
-        echo "Certificate already exists, skipping..."
+        echo "---Certificate already exists, skipping..."
     fi
 fi
 
@@ -114,7 +116,7 @@ fi
             CERT_NAME=$(echo "$line" | sed -n 's/.*"CertName":"\([^"]*\)".*/\1/p')
             if [ -n "$CERT_NAME" ]; then
                 echo "$CERT_NAME" > /root/derper/ssl/certname.txt
-                echo "CertName extracted and saved: $CERT_NAME"
+                echo "---CertName extracted and saved: $CERT_NAME"
             fi
             ;;
     esac
