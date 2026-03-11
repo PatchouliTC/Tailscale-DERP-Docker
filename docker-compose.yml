@@ -7,7 +7,7 @@ services:
        hostname: ${TAILSCALE_HOSTNAME}
        volumes:
          - /lib/modules:/lib/modules:ro
-         - $PWD/certs:/root/derper/${TAILSCALE_DERP_HOSTNAME}
+         - $PWD/certs:/root/derper/ssl:rw
          - $PWD/config:/var/lib/tailscale
        env_file:
         - .env
