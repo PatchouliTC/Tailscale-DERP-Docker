@@ -4,7 +4,12 @@
 /usr/sbin/tailscaled --tun=userspace-networking \
     --socks5-server=0.0.0.0:10086 \
     --state=/var/lib/tailscale/tailscaled.state \
-    >> /dev/stdout
+    >> /dev/stdout &
+
+until /usr/bin/tailscale status 2>&1 | grep -qv "failed to connect"; do
+    echo "Waiting for tailscaled to be ready..."
+    sleep 1
+done
 
 if [ -n "$HEADSCALE_LOGIN_SERVER" ]; then
     /usr/bin/tailscale up \
