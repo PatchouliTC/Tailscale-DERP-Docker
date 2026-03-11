@@ -43,7 +43,7 @@ Port 3478 is for STUN **[you can change to other port]**
 9000:443/tcp
 3478:3478/udp
 ```
-Port 9000 is for HTTPS relay **[you can change to other port,your reverse proxy should redirct to this port with http (http://127.0.0.1:9000 e.g)]**
+Port 9000 is for HTTPS relay **[you can change to other port,your reverse proxy should redirct to this port with http (```http://127.0.0.1:9000``` e.g)]**
 
 Port 3478 is for STUN **[you can change to other port]**
 
