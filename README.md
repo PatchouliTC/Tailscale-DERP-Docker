@@ -24,13 +24,15 @@ To allow full functionality of the DERP server, you will need to open/allow the 
 ```
 
 Port 3478 is for STUN **[for multi tailscale namespace use,3478 port do not mapping into host,STUN port just use for check other client could be connect direct,you can use other derp node to check this]**
+
 Port 443 is for HTTPS relay **[Suggest deploy reverse proxy front containers]**
+
+**EXTRA**:there is a socks5 port 10086 for porxy---if any app what to visit current tailscale virtual network,if you have this requirement,you can map it to host port and use proxy to visit
 
 ## Changing the .env file variables
 **IMPORTANT STEP**
 
-Change the variables below, most importantly the hostname and tailscale auth key variable.  
-Make sure the hostname is correct in your DNS zone or you will get an error when attempting to request a letsencrypt certificate
+Change the variables in .env file 
 
 ## Building Docker Image
 ```
