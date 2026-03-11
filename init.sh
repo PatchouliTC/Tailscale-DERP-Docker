@@ -6,11 +6,10 @@
     --state=/var/lib/tailscale/tailscaled.state \
     >> /dev/stdout &
 
-until /usr/bin/tailscale status >/dev/null 2>&1; do
+until /usr/bin/tailscale status 2>&1 | grep -qv "failed to connect"; do
     echo "Waiting for tailscaled to be ready..."
     sleep 1
 done
-echo "tailscaled is ready."
 
 TS_STATUS=$(/usr/bin/tailscale status 2>&1)
 NEED_AUTH=""
