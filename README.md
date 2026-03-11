@@ -140,7 +140,7 @@ regions:
 
 ## 其他注意事项及说明
 1. 由于tailscaled会默认修改UDP read/write buffer,这需要CAP_NAT_ADMIN 权限并导致宿主机网络配置变更,docker-compose文件默认注释该配置,如果不介意该配置修改可以添加回该配置再启动 **[如果不修改的话启动中会提示error,但是不影响启动仅影响吞吐量]**
-2. 使用自签证书情况下,derp会在中继请求到来时检查tailscale.sock,如果该请求的node key不在记录[即请求者不是当前tailscale client所处虚拟网络中的一员],则拒绝中继,自签仅影响传输过程中TLS加密部分验证校验
+2. 对于客户端验证功能,derp会在中继请求到来时检查tailscale.sock,如果该请求的node key不在记录[即请求者不是当前tailscale client所处虚拟网络中的一员],则拒绝中继,自签仅影响传输过程中TLS加密部分验证校验,并不会影响中继节点认证功能
 3. DERP服务器同时还承载了STUN功能,STUN功能可以理解为协商器,会记录所有连接设备在公网角度来看的访问IP地址,当有设备尝试相互直连的时候,STUN节点就会用于向双方分发对方的公网访问地址然后相互尝试连接,因此如果一个tailscale网络中不存在拥有IPV6地址的开启stun功能的derp节点,那么该网络中所有设备将无法进行任何ipv6直连尝试[表现在tailscale netcheck中ipv6地址永远为no],IPV4同理
 4. 如配置中所写,用户可以将DERP节点配置为纯STUN协商节点/纯DERP中继节点
    
