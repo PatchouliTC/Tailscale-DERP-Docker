@@ -23,7 +23,7 @@ fi
 #--bootstrap-dns-names=$TAILSCALE_DERP_HOSTNAME \
 --certmode=$TAILSCALE_DERP_CERTMODE \
 --certdir=/root/derper/$TAILSCALE_DERP_HOSTNAME \
---a=:$TAILSCALE_DERP_ADDR \
+--a=$TAILSCALE_DERP_ADDR \
 --stun=true \
 --http-port=80 \
 --verify-clients=$TAILSCALE_DERP_VERIFY_CLIENTS
