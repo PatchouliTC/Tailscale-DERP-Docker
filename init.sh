@@ -27,9 +27,7 @@ echo "HTTP Port: $DERP_HTTP_PORT"
 echo "Verify Clients: $TAILSCALE_DERP_VERIFY_CLIENTS"
 
 #Start Tailscale derp server
-/root/go/bin/derper \
-    --hostname=$TAILSCALE_DERP_HOSTNAME \
-    #--bootstrap-dns-names=$TAILSCALE_DERP_HOSTNAME \
+/root/go/bin/derper --hostname=$TAILSCALE_DERP_HOSTNAME \
     --certmode=$TAILSCALE_DERP_CERTMODE \
     --certdir=/root/derper/$TAILSCALE_DERP_HOSTNAME \
     --a=$DERP_ADDR \
