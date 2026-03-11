@@ -100,7 +100,8 @@ Once your Tailscale DERP server is operational and you can see the new device in
 						"stunonly": "true if this node only use for stun else false",
 						"derpport": "derp listening port",
 						"CanPort80": "false",
-						"InsecureForTests": "true if use self sign ip cert"
+						"InsecureForTests": "true if use self sign ip cert",
+						"CertName": "add this field if use self sign ip cert,after container up,copy certs/certname.txt context into there"
 					},
 				],
 			},
@@ -125,6 +126,7 @@ regions:
      derpport: <derp listening port>
 	 CanPort80: false
 	 InsecureForTests: <true if use self sign ip cert>
+	 CertName: <add this field if use self sign ip cert,after container up,copy certs/certname.txt context into there>
 ```
 
 More information can be found here [Tailscale DERP server docs](https://tailscale.com/kb/1118/custom-derp-servers/) on setting this config.  

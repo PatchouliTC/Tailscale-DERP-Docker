@@ -103,7 +103,8 @@ docker compose up -d
 						"stunonly": "如果此节点仅用于 STUN 则为 true，否则为 false",
 						"derpport": "DERP 监听端口",
 						"CanPort80": "false",
-						"InsecureForTests": "如果使用自签名 IP 证书则为 true"
+						"InsecureForTests": "如果使用IP自签证书则为 true",
+						"CertName": "仅当使用IP自签模式添加该字段,启动后将当前目录certs/certname.txt中内容复制到该字段"
 					},
 				],
 			},
@@ -127,7 +128,8 @@ regions:
      stunonly: <如果此节点仅用于 STUN 则为 true，否则为 false>
      derpport: <DERP 监听端口>
 	 CanPort80: false
-	 InsecureForTests: <如果使用自签名 IP 证书则为 true>
+	 InsecureForTests: <如果使用IP自签证书则为 true>
+	 CertName: <仅当使用IP自签模式添加该字段,启动后将当前目录certs/certname.txt中内容复制到该字段>
 ```
 
 更多信息请参阅 [Tailscale DERP 服务器文档](https://tailscale.com/kb/1118/custom-derp-servers/)。
