@@ -11,6 +11,8 @@ until /usr/bin/tailscale status 2>&1 | grep -qv "failed to connect"; do
     sleep 1
 done
 
+echo "------------------------------------------------------"
+
 TS_STATUS=$(/usr/bin/tailscale status 2>&1)
 NEED_AUTH=""
 if echo "$TS_STATUS" | grep -q "Logged out"; then
@@ -38,6 +40,8 @@ else
         --hostname=$TAILSCALE_HOSTNAME \
         >> /dev/stdout
 fi
+
+echo "------------------------------------------------------"
 
 #Check for and or create certs directory
 if [ ! -d "/root/derper/ssl" ]; then
@@ -99,6 +103,8 @@ if [ "$IS_IPV4" -eq 1 ]; then
         echo "---Certificate already exists, skipping..."
     fi
 fi
+
+echo "------------------------------------------------------"
 
 #Start Tailscale derp server
 /root/go/bin/derper --hostname=$TAILSCALE_DERP_HOSTNAME \
