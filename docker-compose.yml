@@ -22,7 +22,7 @@ services:
          - 3478:3478/udp
          # sockets5 proxy port
          #- 10086:10086/tcp
-         # peer relay node port
+         # peer relay node port[make sure host post is same as PEER_RELAY_SERVER_PORT in .env if you enable this!]
          #- 30000:30000/udp
        restart: unless-stopped
        networks:

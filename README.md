@@ -9,6 +9,8 @@
 
 在此容器中，Tailscale 以用户空间模式运行——这意味着不需要 NAT 需求，不会更改宿主机网络配置，也不会创建 Tailscale 网络设备。因此，你可以在同一台宿主机上启动多个带客户端验证的 DERP 服务，使一台主机可以为多个 Tailscale 命名空间充当中继节点，同时不会污染宿主机环境。
 
+同时提供了最新的peer relay配置项`PEER_RELAY_SERVER_PORT`,该client可以同时配置为peer relay使用
+
 # 容器
 容器设置为每次构建时拉取最新版本的 DERPER 应用程序和最新版本的 Tailscale。
 ```

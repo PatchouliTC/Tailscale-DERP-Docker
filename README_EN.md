@@ -9,6 +9,8 @@ There is two parts to the container, the tailscale client itself and the DERP se
 
 In this container,tailscale will running in userspace mode---which require no NAT CAP and won't change host net config and not create tailscale net device,so you can start multi derper with verify client in same host so that one host can role relay node for multi tailscale namespace or not polluting host environment
 
+Also support `PEER_RELAY_SERVER_PORT` for tailscale latest peer relay function,this client also can be used as a peer relay node
+
 # Container
 The container is setup to pull the latest version of the DERPER application and the latest version of Tailscale each time you build the container.
 ```bash
