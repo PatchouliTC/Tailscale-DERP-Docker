@@ -41,14 +41,12 @@ else
         >> /dev/stdout
 fi
 
-# Set relay server port if configured (only when login was performed)
-if [ -n "$NEED_AUTH" ]; then
-    if [ -n "$PEER_RELAY_SERVER_PORT" ]; then
-        echo "---Enabling relay server on port $PEER_RELAY_SERVER_PORT..."
-        /usr/bin/tailscale set --relay-server-port="$PEER_RELAY_SERVER_PORT"
-    fi
+# Set relay server port if configured
+if [ -n "$PEER_RELAY_SERVER_PORT" ]; then
+    echo "---Enabling relay server on port $PEER_RELAY_SERVER_PORT..."
+    /usr/bin/tailscale set --relay-server-port="$PEER_RELAY_SERVER_PORT"
 else
-    echo "---Disabling relay server..."
+    echo "---Relay server port not configured, disabling..."
     /usr/bin/tailscale set --relay-server-port=""
 fi
 
