@@ -81,7 +81,7 @@ docker build . -t tailscale-derp-docker:1.0
 | `DERP_ADDR` | `443` | DERP 监听地址（**因端口映射请勿修改**） |
 | `DERP_STUN_PORT` | `3478` | DERP STUN 端口（**因端口映射请勿修改**） |
 | `DERP_HTTP_PORT` | `80` | DERP HTTP 端口（**因端口映射请勿修改**） |
-| `TAILSCALE_DERP_CERTMODE` | `manual` | 自签名证书或反向代理设置为 `manual`，使用 DERP ACME 设置为 `letsencrypt` |
+| `TAILSCALE_DERP_CERTMODE` | `manual` | 自签名证书设置为 `manual`，使用 DERP ACME/反向代理自管理证书设置为 `letsencrypt` |
 | `PEER_RELAY_SERVER_PORT` | ` ` | 该节点作为中继节点使用的通信端口号[不使用中继节点的话留空即可] |
 
 ## 构建 Docker 镜像
