@@ -41,6 +41,17 @@ else
         >> /dev/stdout
 fi
 
+# Set relay server port if configured (only when login was performed)
+if [ -n "$NEED_AUTH" ]; then
+    if [ -n "$PEER_RELAY_SERVER_PORT" ]; then
+        echo "---Enabling relay server on port $PEER_RELAY_SERVER_PORT..."
+        /usr/bin/tailscale set --relay-server-port="$PEER_RELAY_SERVER_PORT"
+    fi
+else
+    echo "---Disabling relay server..."
+    /usr/bin/tailscale set --relay-server-port=""
+fi
+
 echo "------------------------------------------------------"
 
 #Check for and or create certs directory

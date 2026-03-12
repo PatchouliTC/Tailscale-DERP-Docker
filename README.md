@@ -52,10 +52,18 @@ docker build . -t tailscale-derp-docker:1.0
 
 ---
 
-**额外说明**：容器内有一个 SOCKS5 代理端口 10086——如果有应用需要访问当前 Tailscale 虚拟网络，你可以将此端口映射到宿主机并通过代理访问。
+**额外说明**：
+1. 容器内有一个 SOCKS5 代理端口 10086——如果有应用需要访问当前 Tailscale 虚拟网络，你可以将此端口映射到宿主机并通过代理访问。
 ```
 10086:10086
 ```
+2. 参数`PEER_RELAY_SERVER_PORT`填入端口号即可为容器内client启用peer relay功能 **(截至20260312,headscale还尚未支持该功能)**,此时需要修改compose端口号
+```
+**如果启用peer relay端口的话,确保宿主机映射的对外端口和配置的relay-port相同,目前peer relay的端口无法在管理服务器手动配置,因此如果节点的port和实际对外端口不同会发生无法连接问题**
+<relay-port>:<relay-port>/udp
+```
+
+
 
 ## 修改 .env 文件变量
 **重要步骤**
@@ -74,7 +82,7 @@ docker build . -t tailscale-derp-docker:1.0
 | `DERP_STUN_PORT` | `3478` | DERP STUN 端口（**因端口映射请勿修改**） |
 | `DERP_HTTP_PORT` | `80` | DERP HTTP 端口（**因端口映射请勿修改**） |
 | `TAILSCALE_DERP_CERTMODE` | `manual` | 自签名证书或反向代理设置为 `manual`，使用 DERP ACME 设置为 `letsencrypt` |
-
+| `PEER_RELAY_SERVER_PORT` | ` ` | 该节点作为中继节点使用的通信端口号[不使用中继节点的话留空即可] |
 
 ## 构建 Docker 镜像
 ```

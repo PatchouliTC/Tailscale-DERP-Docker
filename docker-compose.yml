@@ -22,6 +22,8 @@ services:
          - 3478:3478/udp
          # sockets5 proxy port
          #- 10086:10086/tcp
+         # peer relay node port
+         #- 30000:30000/udp
        restart: unless-stopped
        networks:
          - ts-derp-net
