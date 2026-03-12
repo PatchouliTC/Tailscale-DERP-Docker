@@ -1,5 +1,7 @@
 English / [中文](README.md)
 
+# Tailscale-Derp-Client-Docker
+
 # Introduction
 The aim of this repository is to create a simple and easy to use docker container with minimal setup to run your own Tailscale DERP server.  
 
@@ -31,7 +33,7 @@ To allow full functionality of the DERP server, you will need to open/allow the 
 443:443/tcp
 3478:3478/udp
 ```
-Port 80 is for acme http-1 challenge
+Port 80 is for ACME HTTP-01 challenge (DERP has built-in automated certificate request and auto-renewal support)
 
 Port 443 is for HTTPS relay
 
@@ -49,9 +51,15 @@ Port 3478 is for STUN **[you can change to other port]**
 
 ---
 
-**EXTRA**:there is a socks5 port 10086 for porxy---if any app what to visit current tailscale virtual network,if you have this requirement,you can map it to host port and use proxy to visit
+**EXTRA**:
+1. There is a SOCKS5 proxy port 10086 inside the container --- if any app needs to access the current Tailscale virtual network, you can map this port to the host and use the proxy to access.
 ```
 10086:10086
+```
+2. The `PEER_RELAY_SERVER_PORT` parameter enables peer relay functionality for the client inside the container **(as of 2026-03-12, headscale does not yet support this feature)**. You need to modify the compose port mapping accordingly:
+```
+**If peer relay port is enabled, make sure the host mapped external port is the same as the configured relay-port. Currently, the peer relay port cannot be manually configured on the management server, so if the node's port differs from the actual external port, connection issues will occur**
+<relay-port>:<relay-port>/udp
 ```
 
 ## Changing the .env file variables
@@ -70,8 +78,11 @@ Change the variables in .env file
 | `DERP_ADDR` | `443` | DERP listen addr (**do not change due to port mapping**) |
 | `DERP_STUN_PORT` | `3478` | DERP STUN port (**do not change due to port mapping**) |
 | `DERP_HTTP_PORT` | `80` | DERP HTTP port (**do not change due to port mapping**) |
-| `TAILSCALE_DERP_CERTMODE` | `manual` | self sign or reverse proxy set `manual`,use derp acme set `letsencrypt` |
+| `TAILSCALE_DERP_CERTMODE` | `letsencrypt` | Set to `manual` for self-signed certificates, set to `letsencrypt` when using DERP ACME / reverse proxy with self-managed certificates |
+| `PEER_RELAY_SERVER_PORT` | ` ` | Port number for this node to be used as a relay node [leave empty if not using relay node] |
 
+**When using reverse proxy or other methods to handle domain TLS certificates, derper does not need to manage, verify, or read the corresponding certificate files. Setting it to `letsencrypt` can bypass the certificate file check for the corresponding domain.**
+**This behavior may be a bug, but as of 2026-03-12, this configuration still works properly.**
 
 ## Building Docker Image
 ```
@@ -137,7 +148,7 @@ More information can be found here [Tailscale DERP server docs](https://tailscal
 
 ## Additional Notes and Explanations
 1. Since tailscaled modifies UDP read/write buffer by default, which requires CAP_NET_ADMIN capability and causes host network configuration changes, the docker-compose file comments out this configuration by default. If you don't mind this configuration change, you can uncomment it before starting **[if not modified, an error will be shown during startup, but it only affects throughput, not the startup itself]**
-2. When using self-signed certificates, DERP will check tailscale.sock when a relay request arrives. If the node key of the request is not in the records [i.e., the requester is not a member of the virtual network where the current tailscale client is located], the relay will be refused. Self-signed certificates only affect the TLS encryption verification during transmission
+2. For client verification functionality, DERP will check tailscale.sock when a relay request arrives. If the node key of the request is not in the records [i.e., the requester is not a member of the virtual network where the current tailscale client is located], the relay will be refused. Self-signed certificates only affect the TLS encryption verification during transmission and do not affect the relay node authentication functionality
 3. The DERP server also provides STUN functionality. STUN can be understood as a negotiator that records the public IP addresses of all connected devices from the public network perspective. When devices attempt to connect directly to each other, the STUN node will distribute the public access addresses to both parties for mutual connection attempts. Therefore, if there is no DERP node with an IPv6 address and STUN functionality enabled in a tailscale network, all devices in that network will be unable to attempt any IPv6 direct connections [shown as "no" for IPv6 address in tailscale netcheck]. The same applies to IPv4
 4. As written in the configuration, users can configure DERP nodes as pure STUN negotiation nodes or pure DERP relay nodes
    
